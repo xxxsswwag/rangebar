@@ -1,0 +1,6 @@
+asyncio
+sqlalchemy
+ccxt
+psycopg2
+websockets==9.1
+pydantic
