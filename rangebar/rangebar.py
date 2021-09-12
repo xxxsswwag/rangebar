@@ -44,7 +44,11 @@ def rangebar(lst: List[Dict[str, float]]) -> List[Dict[str, float]]:
 if __name__ == '__main__':
     binance = ccxt.binance()
     get_agg_trade = binance.fetch_trades(symbol='BTCUSDT', limit=100)
-    get_rangebar = rangebar(split_list(arr=get_agg_trade, size=10))
+    get_rangebar = rangebar(
+        split_list(
+            arr=get_agg_trade,
+            size=10)
+    )
 
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
