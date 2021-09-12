@@ -4,10 +4,10 @@ import ccxt
 from sqlalchemy import Table, create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from configuration import settings as s
+from configuration import db_settings as db
 
 Base = declarative_base()
-engine = create_engine(f"{s.db}+{s.module}://{s.db_user}@{s.host}:{s.port}/{s.base}", echo=False)
+engine = create_engine(f"{db.db}+{db.module}://{db.username}@{db.host}:{db.port}/{db.base}", echo=False)
 
 
 class RangeBar(Base):
@@ -44,18 +44,18 @@ def rangebar(lst: List[Dict[str, float]]) -> List[Dict[str, float]]:
 if __name__ == '__main__':
     binance = ccxt.binance()
     get_agg_trade = binance.fetch_trades(symbol='BTCUSDT', limit=100)
-    rangebar = rangebar(split_list(arr=get_agg_trade, size=10))
+    get_rangebar = rangebar(split_list(arr=get_agg_trade, size=10))
 
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
-    for rbar in rangebar:
+    for bar in get_rangebar:
         r = RangeBar(
-            timestamp=rbar['T'],
-            volume=rbar['v'],
-            open=rbar['o'],
-            high=rbar['h'],
-            low=rbar['l'],
-            close=rbar['c'],
+            timestamp=bar['T'],
+            volume=bar['v'],
+            open=bar['o'],
+            high=bar['h'],
+            low=bar['l'],
+            close=bar['c'],
         )
         session.add(r)
     session.commit()
