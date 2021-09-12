@@ -33,7 +33,6 @@ session = Session(engine)
 
 # noinspection PyTypeChecker
 async def range_bar(symbol: str, size: int) -> BinanceWS:
-    # ws_prefix = "{}@aggTrade".format(symbol.lower())
     async with BinanceWS(symbol=symbol) as aggregate:
         p, v, t = [], [], []
         while True:
