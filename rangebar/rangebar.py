@@ -11,7 +11,7 @@ engine = create_engine(f"{db.db}+{db.module}://{db.username}@{db.host}:{db.port}
 
 
 class RangeBar(Base):
-    __table__ = Table("range_bar", MetaData(bind=engine), autoload=True)
+    __table__ = Table(db.table, MetaData(bind=engine), autoload=True)
 
 
 def split_list(arr: List[Dict[str, Any]], size: int) -> List[Dict[str, float]]:
