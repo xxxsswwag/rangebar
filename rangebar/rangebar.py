@@ -11,7 +11,7 @@ engine = create_engine(f"{db.db}+{db.module}://{db.username}@{db.host}:{db.port}
 
 
 class RangeBar(Base):
-    __table__ = Table("range_bar", MetaData(bind=engine), autoload=True)
+    __table__ = Table(db.table, MetaData(bind=engine), autoload=True)
 
 
 def split_list(arr: List[Dict[str, Any]], size: int) -> List[Dict[str, float]]:
@@ -44,7 +44,11 @@ def rangebar(lst: List[Dict[str, float]]) -> List[Dict[str, float]]:
 if __name__ == '__main__':
     binance = ccxt.binance()
     get_agg_trade = binance.fetch_trades(symbol='BTCUSDT', limit=100)
-    get_rangebar = rangebar(split_list(arr=get_agg_trade, size=10))
+    get_rangebar = rangebar(
+        split_list(
+            arr=get_agg_trade,
+            size=10)
+    )
 
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
