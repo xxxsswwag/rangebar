@@ -1,11 +1,11 @@
 from sqlalchemy import create_engine
 
 from tables import Base
-from configuration import settings as s
+from configuration import db_settings as db
 
 
 def main():
-    engine = create_engine(f"{s.db}+{s.module}://{s.db_user}@{s.host}:{s.port}/{s.base}", echo=True)
+    engine = create_engine(f"{db.db}+{db.module}://{db.username}@{db.host}:{db.port}/{db.base}", echo=True)
     Base.metadata.create_all(engine)
 
 
