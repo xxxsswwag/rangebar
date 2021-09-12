@@ -1,19 +1,22 @@
 import asyncio
-import websockets
+from websockets import connect
 import json
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from configuration import settings as s
+from configuration import db_settings as db
+from configuration import ws_settings as ws
+
+
 from tables import RangeBar
 
 
 class BinanceWS:
-    def __init__(self, a: str = 'btcusdt@aggTrade'):
-        self.a = a
+    def __init__(self, symbol: str = None):
+        self.symbol = symbol
 
     async def __aenter__(self):
-        self._conn = websockets.connect("wss://fstream.binance.com/ws/{}".format(self.a))
+        self._conn = connect(f"{ws.wss}://{ws.binance}/{self.symbol}@{ws.stream}")
         self.ws = await self._conn.__aenter__()
         return self
 
@@ -24,14 +27,13 @@ class BinanceWS:
         return await self.ws.recv()
 
 
-engine = create_engine(f"{s.db}+{s.module}://{s.db_user}@{s.host}:{s.port}/{s.base}", echo=False)
+engine = create_engine(f"{db.db}+{db.module}://{db.username}@{db.host}:{db.port}/{db.base}", echo=False)
 session = Session(engine)
 
 
 # noinspection PyTypeChecker
 async def range_bar(symbol: str, size: int) -> BinanceWS:
-    ws_prefix = "{}@aggTrade".format(symbol.lower())
-    async with BinanceWS(a=ws_prefix) as aggregate:
+    async with BinanceWS(symbol=symbol) as aggregate:
         p, v, t = [], [], []
         while True:
             agg = json.loads(await aggregate.receive())
