@@ -28,6 +28,7 @@ engine = create_engine(f"{s.db}+{s.module}://{s.db_user}@{s.host}:{s.port}/{s.ba
 session = Session(engine)
 
 
+# noinspection PyTypeChecker
 async def range_bar(symbol: str, size: int) -> BinanceWS:
     ws_prefix = "{}@aggTrade".format(symbol.lower())
     async with BinanceWS(a=ws_prefix) as aggregate:
