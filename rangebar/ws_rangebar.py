@@ -31,7 +31,6 @@ engine = create_engine(f"{db.db}+{db.module}://{db.username}@{db.host}:{db.port}
 session = Session(engine)
 
 
-# noinspection PyTypeChecker
 async def range_bar(symbol: str, size: int) -> BinanceWS:
     async with BinanceWS(symbol=symbol) as aggregate:
         p, v, t = [], [], []
