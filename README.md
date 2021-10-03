@@ -1,1 +1,7 @@
-# range bar
+# Range Bar
+
+## Quickstart
+***
+```
+
+```

@@ -14,9 +14,3 @@ class RangeBar(Base):
     low = Column(Float)
     close = Column(Float)
 
-
-# class RangeBar(Base):
-#     __table__ = Table("range_bar", self.metadata, autoload=True)
-#
-#     def __init__(self, metadata):
-#         self.metadata = MetaData(engine)
